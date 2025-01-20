@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const { Branch, User, Income } = require("../../config/db.modal");
+const { Branch, User, Income } = require("../../models/index");
 
 exports.getDashboardData = async (req, res) => {
   try {

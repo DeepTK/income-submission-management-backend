@@ -1,9 +1,6 @@
 const { verifyToken } = require("../utils/jwt.utils");
 
 exports.authenticate = (req, res, next) => {
-  if (req.method === "GET" && req.path === "/auth/login") {
-    return next();
-  }
 
   const token = req.header("Authorization")?.replace("Bearer ", "");
 

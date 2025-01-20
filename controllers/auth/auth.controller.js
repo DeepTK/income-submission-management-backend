@@ -1,4 +1,4 @@
-const { User } = require("../../config/db.modal");
+const { User } = require("../../models/index");
 const { generateToken, verifyToken } = require("../../utils/jwt.utils");
 const moment = require("moment");
 const { verifyPassword, createPassword } = require("../../utils/bcrypt.util");

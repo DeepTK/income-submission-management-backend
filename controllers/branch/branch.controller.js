@@ -1,4 +1,4 @@
-const { Branch, User } = require("../../config/db.modal");
+const { Branch, User } = require("../../models/index");
 
 exports.getAllBranches = async (req, res) => {
   try {

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const dashboardController = require("./dashboard.controller.js");
+const dashboardController = require("../../controllers/dashboard/dashboard.controller.js");
 const { authenticate } = require("../../middlewares/auth.middleware.js");
 
 router.post(

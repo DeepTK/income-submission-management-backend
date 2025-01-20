@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Income, User, Branch } = require("../../config/db.modal");
+const { Income, User, Branch } = require("../../models/index");
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 exports.addIncome = async (req, res) => {

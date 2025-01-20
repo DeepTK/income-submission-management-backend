@@ -7,11 +7,11 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const cors = require("cors");
 
-const authRoutes = require("./models/auth/auth.routes.js");
-const dashboardRoutes = require("./models/dashboard/dashboard.routes.js");
-const userRoutes = require("./models/user/user.routes.js");
-const branchRoutes = require("./models/branch/branch.routes.js");
-const incomeRoutes = require("./models/income/income.routes.js");
+const authRoutes = require("./routes/auth/auth.routes.js");
+const dashboardRoutes = require("./routes/dashboard/dashboard.routes.js");
+const userRoutes = require("./routes/user/user.routes.js");
+const branchRoutes = require("./routes/branch/branch.routes.js");
+const incomeRoutes = require("./routes/income/income.routes.js");
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
