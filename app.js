@@ -40,6 +40,10 @@ app.use("/user", userRoutes);
 app.use("/branch", branchRoutes);
 app.use("/income", incomeRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello, the server is running!');
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

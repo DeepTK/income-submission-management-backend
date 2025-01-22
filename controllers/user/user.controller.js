@@ -3,12 +3,21 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().populate("branch");
-    res
-      .status(200)
-      .json({ success: true, data: users, msg: "All Users Fetched" });
+    const { role, isActive } = req.query;
+    const query = {};
+    if (role) query.role = role;
+    if (isActive !== undefined) query.isActive = isActive === "true";
+
+    const users = await User.find(query).populate("branch");
+
+    res.status(200).json({
+      success: true,
+      data: users,
+      msg: "All Users Fetched",
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Error fetching users:", error);
+    res.status(500).json({ success: false, error: "An internal server error occurred" });
   }
 };
 

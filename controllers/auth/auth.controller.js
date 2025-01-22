@@ -9,26 +9,26 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: "Email and password are required" });
+    }
+
     const user = await User.findOne({ email }).populate("branch");
     if (!user) {
-      return res.status(400).json({ success: false, error: "User not found" });
+      return res.status(404).json({ success: false, error: "User not found" });
     }
 
     if (!user.isActive) {
-      return res
-        .status(400)
-        .json({ success: false, error: "User deactivated" });
+      return res.status(403).json({ success: false, error: "User is deactivated" });
     }
 
     const isMatch = await verifyPassword(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Invalid credentials" });
+      return res.status(401).json({ success: false, error: "Invalid credentials" });
     }
 
     user.lastLogin = moment();
-    user.save();
+    await user.save();
 
     const token = generateToken(user.id, user.email, user.role, user?.branch?.id || null);
 
@@ -46,12 +46,13 @@ exports.loginUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: data,
+      data,
       token,
       msg: "Login successful",
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Error logging in user:", error);
+    res.status(500).json({ success: false, error: "An internal server error occurred" });
   }
 };
 
@@ -59,42 +60,59 @@ exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, branch, role = "user", isActive = true } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "Email and password are required",
+      });
+    }
+
     if (!emailRegex.test(email)) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Invalid email format" });
+      return res.status(400).json({
+        success: false,
+        error: "Invalid email format",
+      });
     }
 
     const user = await User.findOne({ email });
     if (user) {
-      return res
-        .status(400)
-        .json({ success: false, error: "User with this email already exists" });
+      return res.status(409).json({
+        success: false,
+        error: "User with this email already exists",
+      });
+    }
+
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid role",
+      });
     }
 
     const hashedPassword = await createPassword(password);
-
-    if (!validRoles.includes(role)) {
-      return res.status(400).json({ success: false, error: "Invalid role" });
-    }
 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role: role,
-      branch: branch,
-      isActive : isActive,
+      role,
+      branch,
+      isActive,
     });
-
     await newUser.save();
 
-    res.status(200).json({
+    const { password: _, ...userData } = newUser.toObject();
+
+    res.status(201).json({
       success: true,
-      data: newUser,
-      msg: "User created",
+      data: userData,
+      msg: "User created successfully",
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Error registering user:", error);
+    res.status(500).json({
+      success: false,
+      error: "An internal server error occurred",
+    });
   }
 };
