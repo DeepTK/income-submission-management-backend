@@ -40,7 +40,7 @@ app.use("/user", userRoutes);
 app.use("/branch", branchRoutes);
 app.use("/income", incomeRoutes);
 
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
   res.send('Hello, the server is running!');
 });
 
