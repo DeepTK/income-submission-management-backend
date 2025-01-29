@@ -181,7 +181,7 @@ exports.createBranch = async (req, res) => {
     const branch = new Branch({ name, code, isActive });
     await branch.save();
     res
-      .status(200)
+      .status(201)
       .json({ success: true, data: branch, msg: "Branch Created" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

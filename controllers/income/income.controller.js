@@ -9,21 +9,21 @@ exports.addIncome = async (req, res) => {
     if (!year) {
       return res.status(400).json({
         success: false,
-        message: "Please provide year.",
+        error: "Please provide year.",
       });
     }
 
     if (!month) {
       return res.status(400).json({
         success: false,
-        message: "Please provide month.",
+        error: "Please provide month.",
       });
     }
 
     if (!amount) {
       return res.status(400).json({
         success: false,
-        message: "Please provide amount.",
+        error: "Please provide amount.",
       });
     }
 
@@ -32,14 +32,14 @@ exports.addIncome = async (req, res) => {
     if (isNaN(numericAmount)) {
       return res.status(400).json({
         success: false,
-        message: "Amount must be a valid number.",
+        error: "Amount must be a valid number.",
       });
     }
 
     if (numericAmount <= 0) {
       return res.status(400).json({
         success: false,
-        message: "Amount must be greater than 0.",
+        error: "Amount must be greater than 0.",
       });
     }
 
@@ -54,7 +54,7 @@ exports.addIncome = async (req, res) => {
     if (existingIncome) {
       return res.status(400).json({
         success: false,
-        message: `Income for ${month}/${year} already exists.`,
+        error: `Income for ${month}/${year} already exists.`,
       });
     }
 
@@ -67,18 +67,17 @@ exports.addIncome = async (req, res) => {
     });
 
     res
-      .status(200)
-      .json({ success: true, message: "Income added successfully", income });
+      .status(201)
+      .json({ success: true, msg: "Income added successfully", income });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
-        message: "Duplicate income entry for the same month and year.",
+        error: "Duplicate income entry for the same month and year.",
       });
     }
     res.status(500).json({
       success: false,
-      message: "Error adding income",
       error: error.message,
     });
   }
@@ -98,16 +97,15 @@ exports.updateIncome = async (req, res) => {
     if (!income) {
       return res
         .status(404)
-        .json({ success: false, message: "Income not found" });
+        .json({ success: false, error: "Income not found" });
     }
 
     res
       .status(200)
-      .json({ success: true, message: "Income updated successfully", income });
+      .json({ success: true, msg: "Income updated successfully", income });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error updating income",
       error: error.message,
     });
   }
@@ -120,7 +118,7 @@ exports.deleteIncome = async (req, res) => {
     if (!income) {
       return res.status(404).json({
         success: false,
-        message: "Income not found",
+        error: "Income not found",
       });
     }
 
@@ -128,11 +126,10 @@ exports.deleteIncome = async (req, res) => {
 
     res
       .status(200)
-      .json({ success: true, message: "Income Deleted successfully", income });
+      .json({ success: true, msg: "Income Deleted successfully", income });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error updating income",
       error: error.message,
     });
   }
@@ -215,7 +212,6 @@ exports.getAllIncome = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching income records",
       error: error.message,
     });
   }
@@ -231,7 +227,7 @@ exports.getIncomeByBranch = async (req, res) => {
     if (!branch) {
       return res.status(404).json({
         success: false,
-        message: "Branch not found",
+        error: "Branch not found",
       });
     }
 
@@ -313,7 +309,6 @@ exports.getIncomeByBranch = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching branch income records",
       error: error.message,
     });
   }
@@ -444,7 +439,6 @@ exports.getIncomeByUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching user income records",
       error: error.message,
     });
   }
@@ -459,7 +453,6 @@ exports.getMyIncome = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching your income records",
       error: error.message,
     });
   }
