@@ -51,7 +51,7 @@ exports.getUserByBranchId = async (req, res) => {
 exports.updateUserById = async (req, res) => {
   try {
     const _id = req.params.userId;
-    const { name, email, password, branch, role } = req.body;
+    const { name, email, password, branch, role, isActive } = req.body;
 
     const user = await User.findById(_id);
     if (!user) {
@@ -62,6 +62,7 @@ exports.updateUserById = async (req, res) => {
     user.email = email || user.email;
     user.branch = branch || user.branch;
     user.role = role || user.role;
+    user.isActive = isActive || user.isActive;
 
     if (password) {
       const hashedPassword = await createPassword(password);
