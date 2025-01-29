@@ -1,4 +1,5 @@
 const { User } = require("../../models/index");
+const { createPassword } = require("../../utils/bcrypt.util");
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 exports.getAllUsers = async (req, res) => {
